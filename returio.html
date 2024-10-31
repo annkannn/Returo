@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panteautomat Tilkobling</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+ 
+        #app {
+            width: 90%; /* Responsive width */
+            max-width: 400px; /* Limits width on larger screens */
+            text-align: center;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+ 
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            width: 100%; /* Full-width button */
+            max-width: 200px; /* Limits width on larger screens */
+            margin-top: 10px;
+        }
+ 
+        button:disabled {
+            background-color: #cccccc;
+        }
+ 
+        #status {
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+ 
+        /* Hides the camera section until the button is clicked */
+        #camera-app {
+            display: none;
+            margin-top: 20px;
+        }
+ 
+        video {
+            width: 100%;
+            max-width: 300px; /* Limits video width on larger screens */
+            height: auto; /* Keeps aspect ratio */
+            border-radius: 8px;
+            margin-top: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h1>Tilkobling til Panteautomat</h1>
+        <button id="connectButton">Koble til panteautomat</button>
+        <div id="status">Status: Ikke tilkoblet</div>
+ 
+        <!-- Camera section -->
+        <div id="camera-app">
+            <h1>Koble til kamera</h1>
+            <video id="camera" autoplay playsinline></video>
+            <p id="cameraStatus">Tilgang til kamera...</p>
+        </div>
+    </div>
+ 
+    <script>
+        // Connect to panteautomat and show camera section
+        document.getElementById("connectButton").addEventListener("click", () => {
+            // Update status
+            document.getElementById("status").textContent = "Status: Tilkoblet";
+            document.getElementById("camera-app").style.display = "block"; // Show camera section
+            startCamera(); // Start the camera
+        });
+ 
+        // Function to connect to the camera
+        async function startCamera() {
+            const videoElement = document.getElementById("camera");
+            const statusText = document.getElementById("cameraStatus");
+ 
+            try {
+                // Request camera permission
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                videoElement.srcObject = stream;
+                statusText.textContent = "Kameraet er aktivt!";
+            } catch (error) {
+                statusText.textContent = "Kunne ikke få tilgang til kameraet.";
+                console.error("Kameratilgang feilet:", error);
+            }
+        }
+    </script>
+</body>
+</html>
